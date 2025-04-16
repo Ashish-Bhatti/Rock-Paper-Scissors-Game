@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rock Paper Scissors</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #e0eafc, #cfdef3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      margin: 0;
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    p.instructions {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      color: #555;
+      text-align: center;
+      max-width: 500px;
+    }
+
+    .game-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .choices {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      gap: 10px;
+    }
+
+    .choices button {
+      flex: 1;
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background: #007bff;
+      color: white;
+      transition: background 0.3s;
+    }
+
+    .choices button:hover {
+      background: #0056b3;
+    }
+
+    .output {
+      margin-top: 1rem;
+      min-height: 120px;
+      font-size: 0.95rem;
+      text-align: left;
+      color: #333;
+    }
+
+    .output p {
+      margin: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+    }
+
+    .result-summary {
+      margin-top: 1.5rem;
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #222;
+    }
+
+    .play-again {
+      margin-top: 1.5rem;
+      display: none;
+    }
+
+    .play-again button {
+      background: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .play-again button:hover {
+      background: #1e7e34;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Rock Paper Scissors Game</h1>
+  <p class="instructions">
+    You will play 10 rounds against the computer. Click on one of the buttons below to choose Rock, Paper, or Scissors. After 10 rounds, you'll get your final result. Good luck and have fun!
+  </p>
+
+  <div class="game-container">
+    <div class="choices">
+      <button onclick="playRound(0)">🪨 Rock</button>
+      <button onclick="playRound(1)">📄 Paper</button>
+      <button onclick="playRound(2)">✂️ Scissors</button>
+    </div>
+
+    <div class="output" id="output"></div>
+
+    <div class="result-summary" id="summary"></div>
+
+    <div class="play-again" id="playAgain">
+      <button onclick="startGame()">Play Again</button>
+    </div>
+  </div>
+
+  <script>
+    const choices = ["Rock", "Paper", "Scissors"];
+    let round = 0;
+    let userWin = [];
+    let computerWin = [];
+    let tie = [];
+
+    function startGame() {
+      round = 0;
+      userWin = [];
+      computerWin = [];
+      tie = [];
+      document.getElementById('output').innerHTML = '';
+      document.getElementById('summary').innerText = '';
+      document.getElementById('playAgain').style.display = 'none';
+    }
+
+    function playRound(userInput) {
+      if (round >= 10) return;
+
+      const userChoice = choices[userInput];
+      const computerChoice = choices[Math.floor(Math.random() * 3)];
+
+      let result = "";
+      if (computerChoice === "Rock" && userChoice === "Scissors") {
+        result = "Computer wins this round!";
+        computerWin.push(round);
+      } else if (computerChoice === "Rock" && userChoice === "Paper") {
+        result = "You win this round!";
+        userWin.push(round);
+      } else if (computerChoice === "Rock" && userChoice === "Rock") {
+        result = "It's a tie!";
+        tie.push(round);
+      } else if (computerChoice === "Paper" && userChoice === "Rock") {
+        result = "Computer wins this round!";
+        computerWin.push(round);
+      } else if (computerChoice === "Paper" && userChoice === "Scissors") {
+        result = "You win this round!";
+        userWin.push(round);
+      } else if (computerChoice === "Paper" && userChoice === "Paper") {
+        result = "It's a tie!";
+        tie.push(round);
+      } else if (computerChoice === "Scissors" && userChoice === "Paper") {
+        result = "Computer wins this round!";
+        computerWin.push(round);
+      } else if (computerChoice === "Scissors" && userChoice === "Rock") {
+        result = "You win this round!";
+        userWin.push(round);
+      } else {
+        result = "It's a tie!";
+        tie.push(round);
+      }
+
+      document.getElementById('output').innerHTML += `
+        <p><strong>Round ${round + 1}:</strong> You chose <strong>${userChoice}</strong>, Computer chose <strong>${computerChoice}</strong>. <em>${result}</em></p>
+      `;
+
+      round++;
+
+      if (round === 10) {
+        document.getElementById('summary').innerText =
+          `🎉 Game Over! You won ${userWin.length} time(s), Computer won ${computerWin.length} time(s), and there were ${tie.length} tie(s).`;
+        document.getElementById('playAgain').style.display = 'block';
+      }
+    }
+
+    startGame();
+  </script>
+</body>
+</html>
